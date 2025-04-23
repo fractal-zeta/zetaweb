@@ -1,4 +1,4 @@
-# Fractal - Software Development Company Website
+# Fractal Zeta - Software Development Company Website
 
 A modern, responsive website for Fractal software development company featuring a clean design and proper GitHub Pages deployment setup.
 
