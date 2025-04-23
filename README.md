@@ -103,4 +103,4 @@ MIT
 
 ## Credits
 
-Developed by [Your Name] using Replit
+Developed by Fractal Zeta
