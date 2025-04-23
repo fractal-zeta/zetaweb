@@ -1,4 +1,4 @@
-# Fractal Zeta - Software Development Company Website
+# Fractal - Software Development Company Website
 
 A modern, responsive website for Fractal software development company featuring a clean design and proper GitHub Pages deployment setup.
 
@@ -103,4 +103,4 @@ MIT
 
 ## Credits
 
-Developed by Fractal Zeta
+Developed by [Your Name] using Replit

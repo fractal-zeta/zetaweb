@@ -1,96 +1,173 @@
 #!/bin/bash
 
-# This script helps set up a GitHub repository for GitHub Pages deployment
+# This script creates a project ZIP file optimized for GitHub Pages deployment
 
-echo "GitHub Pages Repository Setup Helper"
-echo "==================================="
-echo "This script will help you set up a GitHub repository for this project."
-echo ""
+# Exit on error
+set -e
 
-# Check if git is installed
-if ! command -v git &> /dev/null; then
-    echo "Error: Git is not installed. Please install Git first."
-    exit 1
+echo "Creating optimized GitHub Pages deployment package..."
+
+# Create a zip file with deployment fixes
+echo "Creating deployment package with path fixes..."
+
+# Create a temporary directory for the modified files
+rm -rf gh-pages-temp
+mkdir -p gh-pages-temp
+cp -r $(ls -A | grep -v "gh-pages-temp") gh-pages-temp/
+
+# Update the index.html file for GitHub Pages
+sed -i 's|href="/favicon.svg"|href="./favicon.svg"|g' gh-pages-temp/client/index.html
+sed -i 's|src="/src/main.tsx"|src="./src/main.tsx"|g' gh-pages-temp/client/index.html
+
+# Update the build script for GitHub Pages
+cat > gh-pages-temp/build-github-pages.sh << 'EOF'
+#!/bin/bash
+
+# This script builds the project for GitHub Pages deployment
+
+# Exit on error
+set -e
+
+echo "Building for GitHub Pages deployment..."
+
+# Install dependencies if node_modules doesn't exist
+if [ ! -d "node_modules" ]; then
+  echo "Installing dependencies..."
+  npm install
 fi
 
-# Check if current directory is a git repository
-if [ -d ".git" ]; then
-    echo "This directory is already a Git repository."
-    
-    # Check for remote origin
-    if git remote get-url origin &> /dev/null; then
-        REMOTE_URL=$(git remote get-url origin)
-        echo "Remote 'origin' is set to: $REMOTE_URL"
-    else
-        echo "No remote 'origin' found. You need to add a remote repository."
-        
-        read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
-        
-        if [ -z "$REPO_URL" ]; then
-            echo "No URL provided. Exiting."
-            exit 1
-        fi
-        
-        git remote add origin "$REPO_URL"
-        echo "Remote 'origin' added: $REPO_URL"
-    fi
-else
-    echo "Initializing Git repository..."
-    git init
-    
-    read -p "Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): " REPO_URL
-    
-    if [ -z "$REPO_URL" ]; then
-        echo "No URL provided. Initialized local repository only."
-    else
-        git remote add origin "$REPO_URL"
-        echo "Remote 'origin' added: $REPO_URL"
-    fi
-fi
+# Export the environment variable for base URL
+export VITE_BASE_URL="./"
 
-# Create .gitignore if it doesn't exist
-if [ ! -f ".gitignore" ]; then
-    echo "Creating .gitignore file..."
-    cat > .gitignore << 'EOL'
-# Dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Build the project
+echo "Building project..."
+npm run build
 
-# Testing
-/coverage
+# Create a 404.html page that's identical to index.html for client-side routing
+echo "Creating 404.html page for client-side routing..."
+cp dist/public/index.html dist/public/404.html
 
-# Production
-/dist
-/build
+# Create .nojekyll file to bypass Jekyll processing
+echo "Creating .nojekyll file..."
+touch dist/public/.nojekyll
 
-# Misc
-.DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Fix asset paths in HTML files
+echo "Fixing asset paths for GitHub Pages..."
+sed -i 's|href="/assets/|href="./assets/|g' dist/public/index.html dist/public/404.html
+sed -i 's|src="/assets/|src="./assets/|g' dist/public/index.html dist/public/404.html
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-EOL
-    echo ".gitignore file created"
-fi
+echo "Build complete! Files ready for GitHub Pages are in dist/public directory."
+echo "To deploy to GitHub Pages:"
+echo "1. Push this code to your GitHub repository"
+echo "2. Go to your repository settings > Pages"
+echo "3. Choose GitHub Actions as your source"
+EOF
 
+# Make the script executable
+chmod +x gh-pages-temp/build-github-pages.sh
+
+# Update GitHub workflow file
+cat > gh-pages-temp/.github/workflows/deploy.yml << 'EOF'
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          static_site_generator: vitejs
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build static site
+        run: |
+          chmod +x ./build-github-pages.sh
+          ./build-github-pages.sh
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist/public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+EOF
+
+# Create a single import file for API with GitHub Pages support
+cat > gh-pages-temp/client/src/api.ts << 'EOF'
+// Define base URL - this will be overridden in GitHub Pages build
+const BASE_URL = import.meta.env.VITE_BASE_URL || '';
+
+// Contact form submission API
+export const submitContactForm = async (formData: {
+  name: string;
+  email: string;
+  message: string;
+}) => {
+  console.log("Form submission:", formData);
+  
+  // For GitHub Pages (static site), we'll simulate a successful submission
+  // In a real app, this would be a fetch to your API endpoint
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ success: true, message: "Message sent successfully!" });
+    }, 1000);
+  });
+};
+
+// API status check
+export const getApiStatus = async () => {
+  // For GitHub Pages deployment (static site)
+  return { status: "online", message: "API is operational" };
+};
+EOF
+
+# Create a ZIP file with all the changes
+cd gh-pages-temp
+zip -r ../fractal_website_github_pages_fix.zip .
+cd ..
+
+# Clean up
+rm -rf gh-pages-temp
+
+echo "Package created: fractal_website_github_pages_fix.zip"
 echo ""
-echo "Repository setup completed!"
-echo ""
-echo "Next steps:"
-echo "1. Make your changes to the code"
-echo "2. Stage your changes:    git add ."
-echo "3. Commit your changes:   git commit -m \"Initial commit\""
-echo "4. Push to GitHub:        git push -u origin main"
-echo ""
-echo "After pushing to GitHub:"
-echo "1. Go to your repository on GitHub"
-echo "2. Navigate to Settings > Pages"
-echo "3. Select 'GitHub Actions' as the source"
-echo ""
-echo "The GitHub workflow will automatically build and deploy your site."
+echo "Instructions for GitHub Pages deployment:"
+echo "1. Extract this ZIP file and push the contents to your GitHub repository"
+echo "2. Go to your repository settings > Pages"
+echo "3. Choose GitHub Actions as your source"
+echo "4. The workflow will automatically build and deploy your site"

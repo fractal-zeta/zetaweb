@@ -2,6 +2,9 @@
 // Since GitHub Pages only serves static content, this file provides mock functionality
 // for the contact form and other API interactions
 
+// Define base URL - will be overridden in GitHub Pages build process
+const BASE_URL = import.meta.env.VITE_BASE_URL || '';
+
 /**
  * Process contact form submission for GitHub Pages version
  */

@@ -13,6 +13,9 @@ if [ ! -d "node_modules" ]; then
   npm install
 fi
 
+# Export the environment variable for base URL
+export VITE_BASE_URL="./"
+
 # Build the project
 echo "Building project..."
 npm run build
@@ -24,6 +27,11 @@ cp dist/public/index.html dist/public/404.html
 # Create .nojekyll file to bypass Jekyll processing
 echo "Creating .nojekyll file..."
 touch dist/public/.nojekyll
+
+# Fix asset paths in HTML files
+echo "Fixing asset paths for GitHub Pages..."
+sed -i 's|href="/assets/|href="./assets/|g' dist/public/index.html dist/public/404.html
+sed -i 's|src="/assets/|src="./assets/|g' dist/public/index.html dist/public/404.html
 
 echo "Build complete! Files ready for GitHub Pages are in dist/public directory."
 echo "To deploy to GitHub Pages:"
