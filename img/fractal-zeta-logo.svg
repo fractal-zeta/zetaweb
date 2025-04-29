@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b35" />
+      <stop offset="100%" stop-color="#f7c59f" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fractal symbol -->
+  <g transform="translate(10, 5)">
+    <path d="M25 0 L40 25 L25 50 L10 25 Z" fill="url(#logoGradient)" />
+    <path d="M25 10 L32.5 25 L25 40 L17.5 25 Z" fill="white" />
+    <path d="M25 20 L27.5 25 L25 30 L22.5 25 Z" fill="url(#logoGradient)" />
+  </g>
+  
+  <!-- Text "Fractal Zeta" -->
+  <g fill="#333333" transform="translate(55, 32)">
+    <path d="M0 0 H12 V2 H2 V8 H10 V10 H2 V16 H12 V18 H0 Z" />
+    <path d="M15 0 C16.5 0 17.5 0.5 18 1.5 C18.5 2.5 18.5 3.5 18 4.5 L16 8 L20 16 C20.5 17 20.5 18 20 19 C19.5 20 18.5 20.5 17 20.5 C16 20.5 15.5 20 15 19 L12 12 H12 L12 18 C12 19 11.5 19.5 10.5 20 C9.5 20.5 9 20.5 8 20 C7 19.5 6.5 19 6.5 18 V2 C6.5 1 7 0.5 8 0 C9 -0.5 9.5 -0.5 10.5 0 C11.5 0.5 12 1 12 2 V8 H12 L12.5 7 C13 6 13.5 5 14 4 C14.5 3 14.5 2 15 1 C15.5 0 16 0 17 0 Z" transform="translate(14, 0) scale(0.9)" />
+    <path d="M0 2 C0 1 0.5 0.5 1.5 0 C2.5 -0.5 3 -0.5 4 0 C5 0.5 5.5 1 5.5 2 V16 C5.5 17 5 17.5 4 18 C3 18.5 2.5 18.5 1.5 18 C0.5 17.5 0 17 0 16 Z" transform="translate(36, 0)" />
+    <path d="M0 0 H12 V2 H2 V8 H10 V10 H2 V18 H0 Z" transform="translate(44, 0)" />
+    <path d="M0 0 H11 C12 0 13 0.5 13.5 1.5 C14 2.5 14 3.5 13.5 4.5 C13 5.5 12 6 11 6 H2 V18 H0 Z" transform="translate(58, 0)" />
+    <path d="M0 0 H11 C12 0 13 0.5 13.5 1.5 C14 2.5 14 3.5 13.5 4.5 C13 5.5 12 6 11 6 H2 V16 H12 V18 H0 Z" transform="translate(74, 0)" />
+    <path d="M0 0 H12 V2 H7 V18 H5 V2 H0 Z" transform="translate(90, 0)" />
+    <path d="M0 2 C0 1 0.5 0.5 1.5 0 C2.5 -0.5 3 -0.5 4 0 C5 0.5 5.5 1 5.5 2 V16 C5.5 17 5 17.5 4 18 C3 18.5 2.5 18.5 1.5 18 C0.5 17.5 0 17 0 16 Z" transform="translate(104, 0)" />
+    <path d="M0 0 H12 V18 H0 V16 H10 V10 H5 V8 H10 V2 H0 Z" transform="translate(112, 0)" />
+  </g>
+</svg>

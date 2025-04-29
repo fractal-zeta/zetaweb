@@ -1,0 +1,363 @@
+/* Base styles */
+:root {
+  --primary: 0 0% 10%; /* Black */
+  --secondary: 16 100% 60%; /* Orange */
+  --secondary-light: 16 100% 70%; /* Light Orange */
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    overflow-x: hidden; /* Prevent horizontal scrolling during animations */
+  }
+}
+
+/* Custom Classes */
+.section-divider {
+  height: 3px;
+  width: 60px;
+  background-color: hsl(var(--secondary));
+  margin: 0 auto;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.section-divider:hover {
+  width: 100px;
+}
+
+.hero-gradient {
+  background: linear-gradient(145deg, #1a1a1a 0%, #3a3a3a 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #FF6B35, #FF8C5F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shine 3s linear infinite;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.glass:hover {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Navigation */
+.nav-link {
+  position: relative;
+  color: #1a1a1a;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: hsl(var(--secondary));
+  transition: width 0.3s;
+}
+
+.nav-link:hover {
+  color: hsl(var(--secondary));
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  transition: all 0.3s;
+}
+
+.mobile-nav-link:hover {
+  background-color: #f3f4f6;
+  transform: translateX(5px);
+}
+
+/* Portfolio filter buttons */
+.filter-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.filter-btn:hover:after {
+  transform: translateX(0);
+}
+
+.filter-btn.active {
+  background-color: hsl(var(--secondary));
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Testimonials styling */
+.testimonials-container, .team-container {
+  padding: 0 20px 40px;
+}
+
+.testimonial-prev,
+.testimonial-next,
+.team-prev,
+.team-next {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.testimonial-prev:hover,
+.testimonial-next:hover,
+.team-prev:hover,
+.team-next:hover {
+  background-color: hsl(var(--secondary));
+  color: white;
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.swiper-pagination-bullet {
+  background: hsl(var(--secondary)) !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  background: hsl(var(--secondary)) !important;
+  transform: scale(1.2);
+}
+
+/* Swiper specific styling */
+.swiper-wrapper {
+  transition-timing-function: ease-out !important;
+}
+
+.swiper-slide {
+  opacity: 0.5;
+  transform: scale(0.85);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.swiper-slide-prev, .swiper-slide-next {
+  opacity: 0.7;
+  transform: scale(0.9);
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutTop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.slide-in-top {
+  animation: slideInTop 0.5s ease forwards;
+}
+
+/* Custom animations for ScrollReveal */
+.fade-in-element {
+  visibility: hidden;
+}
+
+.slide-in-element {
+  visibility: hidden;
+}
+
+.slide-up-element {
+  visibility: hidden;
+}
+
+/* Screen-specific styles */
+@media (max-width: 640px) {
+  .section-divider {
+    width: 40px;
+  }
+  
+  .testimonials-container {
+    padding: 0 10px 30px;
+  }
+}
+
+/* Enhanced hover effects for buttons */
+a.bg-secondary, button.bg-secondary {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.3s ease !important;
+}
+
+a.bg-secondary:before, button.bg-secondary:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 100%);
+  transition: left 0.7s ease;
+  z-index: -1;
+}
+
+a.bg-secondary:hover:before, button.bg-secondary:hover:before {
+  left: 100%;
+}
+
+/* Form input animations */
+input:focus, textarea:focus {
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from {
+    box-shadow: 0 0 0px rgba(255, 107, 53, 0.4);
+  }
+  to {
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+  }
+}

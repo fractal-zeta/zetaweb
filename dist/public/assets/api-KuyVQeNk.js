@@ -1,1 +1,0 @@
-const e=async o=>(console.log("Contact form data (static version):",o),await new Promise(s=>setTimeout(s,800)),{success:!0,message:"Thank you for your message! This is a static demo version. In a production environment, this would send your message to our team."});export{e as submitContactForm};
