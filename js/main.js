@@ -149,14 +149,18 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Navbar scroll effect with enhanced transition
   const navbar = document.getElementById('navbar');
-  
+  const logo = document.getElementById('logo');
+
+
   window.addEventListener('scroll', function() {
     if (window.pageYOffset > 10) {
       navbar.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm');
       navbar.classList.remove('bg-transparent');
+      logo.src = 'img/logo.png'; // normal logo after scrolling
     } else {
       navbar.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm');
       navbar.classList.add('bg-transparent');
+      logo.src = 'img/logo-white.png'; // white version for initial load
     }
   });
   
